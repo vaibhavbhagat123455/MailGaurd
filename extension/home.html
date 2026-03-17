@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>MailGuard Pro — AI-Powered Email Security</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Onest:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05071A;--bg1:#0A0D2A;--bg2:#0F1233;--bg3:#141740;
+  --surface:rgba(255,255,255,.04);--surface2:rgba(255,255,255,.07);
+  --glass:rgba(10,13,42,.65);
+  --bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.14);
+  --tx:#EEF0FF;--tx2:#8892B8;--tx3:#3D4475;
+  --ac:#7C6FFF;--ac2:#5A52E8;--acl:#AAA1FF;
+  --cyan:#22D4FE;--grn:#0FFAB8;--red:#FF4976;--org:#FF8B3E;
+}
+[data-theme="light"]{
+  --bg:#F0F0FC;--bg1:#FFFFFF;--bg2:#F5F5FF;--bg3:#EBEDF8;
+  --surface:rgba(255,255,255,.8);--surface2:rgba(255,255,255,.95);
+  --glass:rgba(240,241,255,.8);
+  --bd:rgba(90,82,232,.1);--bd2:rgba(90,82,232,.2);
+  --tx:#0A0C28;--tx2:#4B4F78;--tx3:#9EA4CC;
+  --ac:#5A52E8;--ac2:#4640D4;--acl:#7C76F0;
+  --cyan:#0099BB;--grn:#00A870;--red:#E03050;--org:#C86030;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Onest',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;line-height:1.6}
+
+/* ── Orbs ── */
+.orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);animation:orbDrift 25s ease-in-out infinite}
+.orb1{width:800px;height:800px;top:-300px;right:-200px;background:radial-gradient(circle,rgba(124,111,255,.15),transparent 70%)}
+.orb2{width:600px;height:600px;bottom:-200px;left:-150px;background:radial-gradient(circle,rgba(34,212,254,.1),transparent 70%);animation-delay:-10s}
+.orb3{width:500px;height:500px;top:50%;left:50%;background:radial-gradient(circle,rgba(255,110,199,.07),transparent 70%);animation-delay:-18s}
+[data-theme="light"] .orb1{background:radial-gradient(circle,rgba(90,82,232,.09),transparent 70%)}
+[data-theme="light"] .orb2{background:radial-gradient(circle,rgba(0,153,187,.06),transparent 70%)}
+[data-theme="light"] .orb3{background:radial-gradient(circle,rgba(192,64,160,.04),transparent 70%)}
+@keyframes orbDrift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(50px,-40px) scale(1.06)}66%{transform:translate(-30px,50px) scale(.94)}}
+
+/* ── Nav ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 56px;height:70px;
+  background:transparent;
+  border-bottom:1px solid transparent;
+  backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);
+  transition:all .4s;
+}
+.nav.scrolled{
+  background:var(--glass);
+  border-bottom-color:var(--bd);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-logo-icon{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#7C6FFF,#5A52E8);display:grid;place-items:center;box-shadow:0 4px 20px rgba(124,111,255,.4)}
+.nav-logo-text{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;letter-spacing:-.4px;color:var(--tx)}
+.nav-links{display:flex;gap:36px;align-items:center}
+.nav-link{font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;transition:color .2s}
+.nav-link:hover{color:var(--tx)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.theme-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--bd);background:var(--surface2);color:var(--tx2);cursor:pointer;display:grid;place-items:center;transition:all .2s}
+.theme-btn:hover{border-color:var(--ac);color:var(--ac)}
+.btn-nav{padding:9px 22px;border-radius:11px;border:none;background:linear-gradient(135deg,#7C6FFF,#5A52E8);color:#fff;font-family:'Onest',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(124,111,255,.3)}
+.btn-nav:hover{box-shadow:0 6px 28px rgba(124,111,255,.45);transform:translateY(-1px)}
+
+/* ── Hero ── */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:100px 56px 60px;position:relative;z-index:1;overflow:hidden;
+}
+.hero-content{max-width:580px;position:relative;z-index:2}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;border-radius:20px;
+  border:1px solid rgba(124,111,255,.3);background:rgba(124,111,255,.08);
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+  color:var(--acl);letter-spacing:.06em;margin-bottom:30px;
+}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--acl);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero h1{
+  font-family:'Sora',sans-serif;
+  font-size:clamp(44px,6vw,72px);font-weight:800;
+  line-height:1.08;letter-spacing:-.04em;margin-bottom:24px;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,#7C6FFF 0%,#22D4FE 60%,#0FFAB8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero p{font-size:17px;color:var(--tx2);line-height:1.75;margin-bottom:36px;max-width:460px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn-hero{
+  display:flex;align-items:center;gap:9px;padding:14px 28px;border-radius:14px;
+  font-family:'Onest',sans-serif;font-size:15px;font-weight:700;cursor:pointer;
+  transition:all .25s;text-decoration:none;
+}
+.btn-hero-primary{
+  background:linear-gradient(135deg,#7C6FFF,#5A52E8);color:#fff;border:none;
+  box-shadow:0 6px 30px rgba(124,111,255,.4);
+}
+.btn-hero-primary:hover{transform:translateY(-2px);box-shadow:0 10px 42px rgba(124,111,255,.5)}
+.btn-hero-secondary{
+  background:var(--surface2);color:var(--tx);
+  border:1px solid var(--bd2);
+}
+.btn-hero-secondary:hover{background:var(--surface);border-color:var(--bd2);transform:translateY(-1px)}
+.hero-stats{
+  display:flex;gap:36px;margin-top:52px;padding-top:32px;
+  border-top:1px solid var(--bd);
+}
+.stat-n{font-family:'Sora',sans-serif;font-size:30px;font-weight:800;letter-spacing:-.02em}
+.stat-l{font-size:12px;color:var(--tx2);margin-top:2px}
+
+/* Hero visual */
+.hero-visual{
+  position:absolute;right:-40px;top:50%;transform:translateY(-50%);
+  width:50%;height:80%;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.shield-scene{position:relative;width:360px;height:440px;display:flex;align-items:center;justify-content:center}
+.ring-pulse{
+  position:absolute;border-radius:50%;border-style:solid;
+  animation:ringAnim 3s ease-in-out infinite;
+}
+.ring-pulse:nth-child(1){width:300px;height:300px;border-width:1px;border-color:rgba(124,111,255,.3);animation-delay:0s}
+.ring-pulse:nth-child(2){width:370px;height:370px;border-width:1px;border-color:rgba(34,212,254,.2);animation-delay:.8s}
+.ring-pulse:nth-child(3){width:440px;height:440px;border-width:1px;border-color:rgba(124,111,255,.1);animation-delay:1.6s}
+@keyframes ringAnim{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.04);opacity:1}}
+.shield-svg-wrap{
+  position:relative;z-index:2;
+  animation:shieldFloat 5s ease-in-out infinite;
+}
+@keyframes shieldFloat{
+  0%,100%{transform:translateY(0) rotateY(0deg) rotateX(0deg)}
+  25%{transform:translateY(-14px) rotateY(8deg) rotateX(2deg)}
+  75%{transform:translateY(8px) rotateY(-6deg) rotateX(-1deg)}
+}
+.shield-svg{
+  width:200px;height:240px;
+  filter:drop-shadow(0 0 40px rgba(124,111,255,.5)) drop-shadow(0 20px 40px rgba(0,0,0,.4));
+}
+.particle-field{position:absolute;inset:0;pointer-events:none}
+.pt{
+  position:absolute;width:3px;height:3px;border-radius:50%;
+  background:rgba(124,111,255,.7);
+  animation:ptOrbit linear infinite;
+}
+.pt:nth-child(1){top:50%;left:50%;animation-duration:5s;animation-delay:0s;transform-origin:-130px 0}
+.pt:nth-child(2){top:50%;left:50%;background:rgba(34,212,254,.6);animation-duration:8s;animation-delay:-3s;transform-origin:-155px 0}
+.pt:nth-child(3){top:50%;left:50%;animation-duration:11s;animation-delay:-6s;transform-origin:-115px 0}
+.pt:nth-child(4){top:50%;left:50%;background:rgba(15,250,184,.5);animation-duration:7s;animation-delay:-4s;transform-origin:-140px 0}
+@keyframes ptOrbit{from{transform:rotate(0deg) translateX(0)}to{transform:rotate(360deg) translateX(0)}}
+
+/* ── Sections ── */
+.section{padding:110px 56px;position:relative;z-index:1}
+.section-inner{max-width:1180px;margin:0 auto}
+.section-label{
+  display:inline-block;font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--acl);margin-bottom:14px;
+}
+.section-title{font-family:'Sora',sans-serif;font-size:clamp(32px,4vw,48px);font-weight:800;letter-spacing:-.03em;margin-bottom:16px;line-height:1.1}
+.section-sub{font-size:16px;color:var(--tx2);max-width:520px;line-height:1.75}
+
+/* Feature cards */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:60px}
+.feat-card{
+  background:var(--surface);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--bd);border-radius:22px;padding:28px;
+  transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;cursor:default;
+}
+.feat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--ac),var(--cyan));
+  transform:scaleX(0);transform-origin:left;transition:transform .35s;
+}
+.feat-card:hover{
+  background:var(--surface2);border-color:var(--bd2);
+  transform:translateY(-4px);
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+}
+.feat-card:hover::before{transform:scaleX(1)}
+.feat-icon{
+  width:50px;height:50px;border-radius:15px;display:grid;place-items:center;margin-bottom:20px;
+}
+.feat-title{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;margin-bottom:10px;letter-spacing:-.01em}
+.feat-desc{font-size:14px;color:var(--tx2);line-height:1.7}
+.feat-tag{
+  display:inline-block;margin-top:16px;font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:600;letter-spacing:.06em;padding:4px 10px;border-radius:7px;
+}
+
+/* How it works */
+.how-wrap{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.steps{display:flex;flex-direction:column}
+.step{display:flex;gap:20px;padding:22px 0;border-bottom:1px solid var(--bd)}
+.step:last-child{border-bottom:none}
+.step-num{
+  width:40px;height:40px;border-radius:12px;flex-shrink:0;
+  background:var(--surface2);border:1px solid var(--bd2);
+  display:grid;place-items:center;
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--tx2);
+  transition:all .3s;
+}
+.step:hover .step-num{background:var(--ac);border-color:var(--ac);color:#fff}
+.step-title{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;margin-bottom:5px}
+.step-desc{font-size:14px;color:var(--tx2);line-height:1.6}
+
+/* How visual — live scan preview */
+.how-visual{
+  background:var(--surface);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--bd);border-radius:24px;padding:28px;overflow:hidden;
+}
+.scan-demo{display:flex;flex-direction:column;gap:10px}
+.scan-row{
+  display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:13px;
+  background:var(--surface2);border:1px solid var(--bd);
+  animation:scanIn .5s ease both;
+}
+.scan-row:nth-child(1){animation-delay:.1s}.scan-row:nth-child(2){animation-delay:.25s}
+.scan-row:nth-child(3){animation-delay:.4s}.scan-row:nth-child(4){animation-delay:.55s}
+@keyframes scanIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+.scan-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.scan-from{font-family:'Onest',sans-serif;font-size:12px;font-weight:600;color:var(--tx)}
+.scan-subj{font-family:'Onest',sans-serif;font-size:10px;color:var(--tx2);margin-top:2px}
+.scan-score{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;padding:4px 10px;border-radius:9px;margin-left:auto;flex-shrink:0}
+.model-breakdown{margin-top:18px;padding:16px;background:var(--surface2);border-radius:14px;border:1px solid var(--bd)}
+.mb-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tx3);letter-spacing:.1em;margin-bottom:10px;text-transform:uppercase}
+.mb-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0}
+.mb-key{color:var(--tx2);font-weight:500}.mb-val{font-family:'JetBrains Mono',monospace;font-weight:600}
+
+/* Download */
+.download-section{
+  padding:110px 56px;position:relative;z-index:1;
+  background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);
+}
+.download-grid{max-width:980px;margin:60px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.download-card{
+  background:var(--surface);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--bd);border-radius:24px;padding:32px;position:relative;overflow:hidden;
+}
+.download-card::after{
+  content:'';position:absolute;bottom:-60px;right:-60px;width:220px;height:220px;
+  border-radius:50%;background:radial-gradient(circle,rgba(124,111,255,.15),transparent);pointer-events:none;
+}
+.dc-title{font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+.dc-desc{font-size:14px;color:var(--tx2);line-height:1.65;margin-bottom:22px}
+.req-list{padding:14px;background:var(--surface2);border-radius:12px;border:1px solid var(--bd);margin-bottom:22px;display:flex;flex-direction:column;gap:8px}
+.req-row{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--tx2)}
+.req-icon{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;flex-shrink:0;background:rgba(15,250,184,.12);border:1px solid rgba(15,250,184,.2)}
+.dl-btn{
+  width:100%;padding:14px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#7C6FFF,#5A52E8);color:#fff;
+  font-family:'Onest',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:9px;
+  box-shadow:0 6px 30px rgba(124,111,255,.4);
+}
+.dl-btn:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(124,111,255,.55)}
+.install-steps{display:flex;flex-direction:column;gap:22px}
+.inst-step{display:flex;gap:16px;align-items:flex-start}
+.inst-num{
+  width:34px;height:34px;border-radius:11px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(124,111,255,.2),rgba(124,111,255,.1));
+  border:1px solid rgba(124,111,255,.25);
+  display:grid;place-items:center;
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--acl);
+}
+.inst-title{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--tx);margin-bottom:4px}
+.inst-desc{font-size:13px;color:var(--tx2);line-height:1.6}
+code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface2);padding:2px 6px;border-radius:5px;border:1px solid var(--bd2);color:var(--acl)}
+
+/* Footer */
+.footer{padding:40px 56px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--bd);position:relative;z-index:1}
+.footer-copy{font-size:13px;color:var(--tx3);font-family:'JetBrains Mono',monospace}
+.footer-links{display:flex;gap:28px}
+.footer-link{font-size:13px;color:var(--tx3);text-decoration:none;transition:color .2s}.footer-link:hover{color:var(--tx2)}
+
+/* Scroll animations */
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.fade-up.visible{opacity:1;transform:none}
+
+/* Responsive */
+@media(max-width:960px){
+  .features-grid{grid-template-columns:1fr 1fr}
+  .how-wrap,.download-grid{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .nav-links{display:none}
+  .hero,.section,.download-section,.footer{padding-left:24px;padding-right:24px}
+  .nav{padding:0 24px}
+}
+@media(max-width:600px){
+  .features-grid{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap;gap:20px}
+}
+</style>
+</head>
+<body>
+<div class="orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<!-- Nav -->
+<nav class="nav" id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2L3 5V10C3 14 6.5 17.5 10 18.5C13.5 17.5 17 14 17 10V5L10 2Z" stroke="#fff" stroke-width="1.5" fill="rgba(255,255,255,0.15)"/>
+        <path d="M7 10L9 12L13 8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="nav-logo-text">MailGuard Pro</span>
+  </a>
+  <div class="nav-links">
+    <a href="#features" class="nav-link">Features</a>
+    <a href="#how-it-works" class="nav-link">How it works</a>
+    <a href="#download" class="nav-link">Download</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">
+      <svg id="theme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+    </button>
+    <button class="btn-nav" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">Download Free</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><div class="badge-dot"></div>LOCAL ML · NO CLOUD · FULLY PRIVATE</div>
+    <h1>Your Inbox,<br><em>Fully Protected</em></h1>
+    <p>MailGuard Pro uses your own local ML models to detect phishing, malicious URLs, and prompt injection attacks — all running on your machine with zero data leaving your device.</p>
+    <div class="hero-cta">
+      <a href="#download" class="btn-hero btn-hero-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download Extension
+      </a>
+      <a href="#features" class="btn-hero btn-hero-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        See Features
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-n">3</div><div class="stat-l">ML Models</div></div>
+      <div><div class="stat-n">100%</div><div class="stat-l">Local Inference</div></div>
+      <div><div class="stat-n">&lt;200ms</div><div class="stat-l">Response Time</div></div>
+    </div>
+  </div>
+
+  <!-- Animated CSS Shield -->
+  <div class="hero-visual">
+    <div class="shield-scene">
+      <div class="ring-pulse"></div>
+      <div class="ring-pulse"></div>
+      <div class="ring-pulse"></div>
+      <div class="particle-field">
+        <div class="pt"></div>
+        <div class="pt"></div>
+        <div class="pt"></div>
+        <div class="pt"></div>
+      </div>
+      <div class="shield-svg-wrap">
+        <svg class="shield-svg" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#7C6FFF" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#5A52E8" stop-opacity="0.7"/>
+            </linearGradient>
+            <linearGradient id="shieldFill" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#7C6FFF" stop-opacity="0.12"/>
+              <stop offset="100%" stop-color="#22D4FE" stop-opacity="0.06"/>
+            </linearGradient>
+            <linearGradient id="checkGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#7C6FFF"/>
+              <stop offset="100%" stop-color="#22D4FE"/>
+            </linearGradient>
+            <filter id="glow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="softGlow"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <!-- Outer glow shield -->
+          <path d="M100 8L18 42V104C18 152 56 192 100 206C144 192 182 152 182 104V42L100 8Z" fill="url(#shieldFill)" stroke="url(#shieldGrad)" stroke-width="1.5" filter="url(#softGlow)"/>
+          <!-- Inner shield border -->
+          <path d="M100 22L32 52V104C32 146 64 180 100 193C136 180 168 146 168 104V52L100 22Z" fill="none" stroke="rgba(124,111,255,0.2)" stroke-width="1"/>
+          <!-- Animated scan line -->
+          <line x1="32" y1="100" x2="168" y2="100" stroke="url(#checkGrad)" stroke-width="0.8" stroke-dasharray="4 4" opacity="0.5">
+            <animateTransform attributeName="transform" type="translate" values="0,-60;0,60;0,-60" dur="2.5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0;0.7;0" dur="2.5s" repeatCount="indefinite"/>
+          </line>
+          <!-- Checkmark with glow -->
+          <path d="M68 116L90 138L136 90" stroke="url(#checkGrad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+          <path d="M68 116L90 138L136 90" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+          <!-- Corner accents -->
+          <circle cx="100" cy="8" r="4" fill="#7C6FFF" opacity="0.9"/>
+          <circle cx="18" cy="42" r="2.5" fill="#22D4FE" opacity="0.7"/>
+          <circle cx="182" cy="42" r="2.5" fill="#22D4FE" opacity="0.7"/>
+          <circle cx="100" cy="206" r="2.5" fill="#0FFAB8" opacity="0.6"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="section-inner">
+    <div class="fade-up">
+      <span class="section-label">What we detect</span>
+      <h2 class="section-title">Three models.<br>One extension.</h2>
+      <p class="section-sub">Every email is analysed in parallel by three purpose-built ML models, each specialised in a different threat vector.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card fade-up">
+        <div class="feat-icon" style="background:rgba(124,111,255,.12);border:1px solid rgba(124,111,255,.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C6FFF" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div class="feat-title">Phishing Email Detector</div>
+        <div class="feat-desc">Logistic Regression trained on 100k+ emails. Detects urgency language, spoofed domains, header anomalies, and malicious link patterns with LIME-powered evidence.</div>
+        <span class="feat-tag" style="background:rgba(124,111,255,.1);color:var(--acl);border:1px solid rgba(124,111,255,.2)">TF-IDF · Handcrafted features</span>
+      </div>
+      <div class="feat-card fade-up" style="transition-delay:.1s">
+        <div class="feat-icon" style="background:rgba(34,212,254,.1);border:1px solid rgba(34,212,254,.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22D4FE" stroke-width="1.8"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
+        <div class="feat-title">Malicious URL Classifier</div>
+        <div class="feat-desc">XGBoost with 400 trees classifying URLs into phishing, malware, defacement, or benign across 36 extracted features including brand impersonation and TLD risk.</div>
+        <span class="feat-tag" style="background:rgba(34,212,254,.1);color:var(--cyan);border:1px solid rgba(34,212,254,.2)">XGBoost · 36 features</span>
+      </div>
+      <div class="feat-card fade-up" style="transition-delay:.2s">
+        <div class="feat-icon" style="background:rgba(15,250,184,.1);border:1px solid rgba(15,250,184,.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0FFAB8" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div class="feat-title">Prompt Injection Detector</div>
+        <div class="feat-desc">Detects 5 attack types: direct override, role play, data exfiltration, jailbreak, and indirect injection using trigram TF-IDF plus 12 structural behavioural features.</div>
+        <span class="feat-tag" style="background:rgba(15,250,184,.1);color:var(--grn);border:1px solid rgba(15,250,184,.2)">Trigram · 5 attack types</span>
+      </div>
+      <div class="feat-card fade-up" style="transition-delay:.05s">
+        <div class="feat-icon" style="background:rgba(255,139,62,.1);border:1px solid rgba(255,139,62,.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF8B3E" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+        <div class="feat-title">Auto-Block Senders</div>
+        <div class="feat-desc">Senders scoring CRITICAL on 3 or more emails are automatically quarantined. Desktop notifications fire instantly. One-click unblock from the dashboard.</div>
+        <span class="feat-tag" style="background:rgba(255,139,62,.1);color:var(--org);border:1px solid rgba(255,139,62,.2)">Auto-quarantine</span>
+      </div>
+      <div class="feat-card fade-up" style="transition-delay:.15s">
+        <div class="feat-icon" style="background:rgba(255,73,118,.1);border:1px solid rgba(255,73,118,.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF4976" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="feat-title">X-Mailer Detection</div>
+        <div class="feat-desc">Identifies PHP-class mailers, bulk senders, and spoofed mail clients from X-Mailer headers. Adds a risk penalty and flags the specific mailer type in the dashboard.</div>
+        <span class="feat-tag" style="background:rgba(255,73,118,.1);color:var(--red);border:1px solid rgba(255,73,118,.2)">Header analysis</span>
+      </div>
+      <div class="feat-card fade-up" style="transition-delay:.25s">
+        <div class="feat-icon" style="background:rgba(124,111,255,.12);border:1px solid rgba(124,111,255,.2)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C6FFF" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg></div>
+        <div class="feat-title">100% Local Processing</div>
+        <div class="feat-desc">All inference runs on your machine via a local Flask server. No email content ever leaves your device. GPT-4o-mini summaries are optional and separately opted in.</div>
+        <span class="feat-tag" style="background:rgba(124,111,255,.1);color:var(--acl);border:1px solid rgba(124,111,255,.2)">Zero telemetry</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="section" id="how-it-works" style="background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)">
+  <div class="section-inner">
+    <div class="how-wrap">
+      <div class="fade-up">
+        <span class="section-label">How it works</span>
+        <h2 class="section-title" style="font-size:clamp(28px,3.5vw,42px)">From inbox<br>to insight<br>in seconds</h2>
+        <p class="section-sub" style="margin-bottom:36px">Every new email triggers a parallel analysis pipeline across all three models simultaneously.</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">01</div><div><div class="step-title">Gmail fetched &amp; parsed</div><div class="step-desc">Headers, body, and links extracted. OAuth token never stored.</div></div></div>
+          <div class="step"><div class="step-num">02</div><div><div class="step-title">Local server analyses</div><div class="step-desc">POST to localhost:5000. Three models run in under 200ms on warm cache.</div></div></div>
+          <div class="step"><div class="step-num">03</div><div><div class="step-title">Risk score computed</div><div class="step-desc">Model confidence used directly as risk score — no heuristic override.</div></div></div>
+          <div class="step"><div class="step-num">04</div><div><div class="step-title">Dashboard updated live</div><div class="step-desc">Every card flashes as new results arrive. Auto-block fires if threshold hit.</div></div></div>
+        </div>
+      </div>
+      <div class="how-visual fade-up" style="transition-delay:.2s">
+        <div class="mb-label">Live Scan Feed</div>
+        <div class="scan-demo">
+          <div class="scan-row"><div class="scan-dot" style="background:#FF4976"></div><div class="scan-info"><div class="scan-from">security@paypa1-verify.xyz</div><div class="scan-subj">Urgent: Verify your PayPal account</div></div><div class="scan-score" style="background:rgba(255,73,118,.1);color:#FF4976">94</div></div>
+          <div class="scan-row"><div class="scan-dot" style="background:#0FFAB8"></div><div class="scan-info"><div class="scan-from">noreply@github.com</div><div class="scan-subj">Your pull request was merged</div></div><div class="scan-score" style="background:rgba(15,250,184,.1);color:#0FFAB8">08</div></div>
+          <div class="scan-row"><div class="scan-dot" style="background:#FF8B3E"></div><div class="scan-info"><div class="scan-from">info@prize-winner.tk</div><div class="scan-subj">Congratulations! You've been selected</div></div><div class="scan-score" style="background:rgba(255,139,62,.1);color:#FF8B3E">71</div></div>
+          <div class="scan-row"><div class="scan-dot" style="background:#0FFAB8"></div><div class="scan-info"><div class="scan-from">team@linear.app</div><div class="scan-subj">Weekly digest — 3 issues updated</div></div><div class="scan-score" style="background:rgba(15,250,184,.1);color:#0FFAB8">04</div></div>
+        </div>
+        <div class="model-breakdown">
+          <div class="mb-label">Model Breakdown</div>
+          <div class="mb-row"><span class="mb-key">Email model</span><span class="mb-val" style="color:#FF4976">phishing · 94.2%</span></div>
+          <div class="mb-row"><span class="mb-key">URL model</span><span class="mb-val" style="color:#FF4976">malicious · 97.6%</span></div>
+          <div class="mb-row"><span class="mb-key">Injection model</span><span class="mb-val" style="color:#0FFAB8">safe · 2.1%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Download -->
+<section class="download-section" id="download">
+  <div class="section-inner">
+    <div style="text-align:center" class="fade-up">
+      <span class="section-label">Get started free</span>
+      <h2 class="section-title" style="margin:0 auto">Download &amp; install<br>in 4 steps</h2>
+      <p class="section-sub" style="margin:16px auto 0;text-align:center">No account required. No cloud. No subscription. Just copy your model files and go.</p>
+    </div>
+    <div class="download-grid">
+      <div class="download-card fade-up">
+        <div class="dc-title">MailGuard Pro v7</div>
+        <div class="dc-desc">Complete package: Flask API server, Chrome extension, all Python model files. Includes README and start.bat for one-click startup on Windows.</div>
+        <div class="req-list">
+          <div class="req-row"><div class="req-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0FFAB8" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Python 3.9+ installed</span></div>
+          <div class="req-row"><div class="req-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0FFAB8" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Google Chrome browser</span></div>
+          <div class="req-row"><div class="req-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0FFAB8" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Your 10 model .pkl files</span></div>
+        </div>
+        <button class="dl-btn" id="dl-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Download mailguard_v7.zip
+        </button>
+        <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--tx3);font-family:'JetBrains Mono',monospace">Free · No account · v7.0.0</div>
+      </div>
+      <div class="install-steps fade-up" style="transition-delay:.15s">
+        <div class="inst-step"><div class="inst-num">1</div><div><div class="inst-title">Copy your .pkl model files</div><div class="inst-desc">Extract the zip and paste all 10 <code>.pkl</code> files into <code>server/models/</code></div></div></div>
+        <div class="inst-step"><div class="inst-num">2</div><div><div class="inst-title">Start the local server</div><div class="inst-desc">Double-click <code>start.bat</code>. Wait for <em>"Server online :5000"</em> in the window.</div></div></div>
+        <div class="inst-step"><div class="inst-num">3</div><div><div class="inst-title">Load extension in Chrome</div><div class="inst-desc">Go to <code>chrome://extensions</code> → Developer mode → Load unpacked → select <code>extension/</code></div></div></div>
+        <div class="inst-step"><div class="inst-num">4</div><div><div class="inst-title">Sign in and start scanning</div><div class="inst-desc">Click the shield icon → Start Detection → allow Google sign-in. You're protected.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-copy">MailGuard Pro v7 · Built for local ML inference</div>
+  <div class="footer-links">
+    <a href="#features" class="footer-link">Features</a>
+    <a href="#how-it-works" class="footer-link">How it works</a>
+    <a href="#download" class="footer-link">Download</a>
+  </div>
+</footer>
+
+<script src="home.js"></script>
+</body>
+</html>
