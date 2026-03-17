@@ -1,22 +1,19 @@
-FROM python:3.10-slim
-
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY server/requirements.txt ./requirements.txt
+RUN apt-get update && apt-get install -y \
+    gcc g++ build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install --no-cache-dir --upgrade pip && \
-    pip3 install --no-cache-dir -r requirements.txt
+COPY requirements.txt .
 
-COPY server/ ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8080
+COPY . .
 
 ENV PORT=8080
 
-CMD ["python3", "server.py"]
+EXPOSE 8080
+
+CMD ["python", "server.py"]
