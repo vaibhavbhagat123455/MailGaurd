@@ -139,4 +139,4 @@ if __name__ == '__main__':
         print(f"\n  All 10 model files found in {models_dir}")
 
     print("\n  Press CTRL+C to stop\n")
-    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)), debug=False, threaded=True)
