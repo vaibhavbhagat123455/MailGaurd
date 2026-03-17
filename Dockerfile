@@ -2,11 +2,14 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY server/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY server/requirements.txt ./requirements.txt
 
-COPY server/ .
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+COPY server/ ./
 
 EXPOSE 8080
 
-CMD ["python", "server.py"]
+ENV PORT=8080
+
+CMD ["python3", "server.py"]
