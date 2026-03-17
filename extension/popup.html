@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<title>MailGuard Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05071A;--surface:rgba(255,255,255,.04);--surface2:rgba(255,255,255,.07);
+  --glass:rgba(14,17,50,.7);--bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.15);
+  --tx:#EEF0FF;--tx2:#8892B8;--tx3:#3D4475;
+  --ac:#7C6FFF;--ac2:#5A52E8;--acl:#AAA1FF;
+  --grn:#0FFAB8;--red:#FF4976;--org:#FF8B3E;
+}
+[data-theme="light"]{
+  --bg:#ECEDF8;--surface:rgba(255,255,255,.78);--surface2:rgba(255,255,255,.92);
+  --glass:rgba(240,241,255,.8);--bd:rgba(90,82,232,.1);--bd2:rgba(90,82,232,.2);
+  --tx:#0A0C28;--tx2:#4B4F78;--tx3:#9EA4CC;
+  --ac:#5A52E8;--ac2:#4640D4;--acl:#7C76F0;
+  --grn:#00A870;--red:#E03050;--org:#C86030;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  width:300px;
+  background:var(--bg);color:var(--tx);
+  font-family:'Onest',sans-serif;font-size:13px;
+  overflow:hidden;
+  background-image:
+    radial-gradient(ellipse 300px 200px at 80% 0%,rgba(124,111,255,.18),transparent),
+    radial-gradient(ellipse 200px 200px at 0% 100%,rgba(34,212,254,.1),transparent);
+}
+
+/* Header */
+.hdr{
+  padding:14px 16px 12px;
+  background:rgba(14,17,50,.6);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:10px;
+}
+.logo{
+  width:36px;height:36px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,#7C6FFF,#5A52E8);
+  display:grid;place-items:center;
+  box-shadow:0 4px 16px rgba(124,111,255,.45);
+}
+.brand{font-family:'Sora',sans-serif;font-size:14px;font-weight:800;letter-spacing:-.3px}
+.brand-sub{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--tx3);letter-spacing:.08em;margin-top:2px}
+.hdr-right{margin-left:auto;display:flex;gap:6px}
+.icon-btn{
+  width:30px;height:30px;border-radius:9px;border:1px solid var(--bd);
+  background:var(--surface2);color:var(--tx2);cursor:pointer;
+  display:grid;place-items:center;transition:all .18s;
+}
+.icon-btn:hover{border-color:var(--ac);color:var(--ac);background:rgba(124,111,255,.1)}
+
+/* Server row */
+.srv-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 16px;background:rgba(14,17,50,.4);border-bottom:1px solid var(--bd);
+}
+.srv-ind{display:flex;align-items:center;gap:7px}
+.srv-dot{width:7px;height:7px;border-radius:50%;background:var(--tx3);transition:all .3s}
+.srv-dot.on{background:var(--grn);box-shadow:0 0 8px rgba(15,250,184,.5);animation:blip 2s infinite}
+.srv-dot.off{background:var(--red)}
+@keyframes blip{0%,100%{opacity:1}50%{opacity:.3}}
+.srv-text{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em}
+.srv-text.on{color:var(--grn)}.srv-text.off{color:var(--tx2)}
+.user-tag{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--tx3);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Detection row */
+.det-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--bd)}
+.det-left{display:flex;align-items:center;gap:9px}
+.ring{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--tx3);display:grid;place-items:center;position:relative;transition:border-color .3s}
+.ring.on{border-color:var(--ac)}
+.ring.on::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--ac);opacity:.4;animation:ripple 1.8s linear infinite}
+@keyframes ripple{0%{transform:scale(.6);opacity:.6}100%{transform:scale(1.6);opacity:0}}
+.ring-core{width:7px;height:7px;border-radius:50%;background:var(--tx3);transition:background .3s}
+.ring.on .ring-core{background:var(--ac)}
+.det-label{font-size:11px;font-weight:600;color:var(--tx2)}
+.det-label b{color:var(--ac);font-weight:700}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;margin:12px 12px 0;gap:8px}
+.stat-card{
+  background:var(--surface);border:1px solid var(--bd);border-radius:13px;
+  padding:11px 10px;text-align:center;cursor:default;
+  transition:transform .18s,border-color .18s;
+}
+.stat-card:hover{transform:translateY(-1px);border-color:var(--bd2)}
+.stat-n{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;line-height:1}
+.stat-l{font-size:8px;color:var(--tx3);text-transform:uppercase;letter-spacing:.1em;margin-top:4px;font-weight:700}
+
+/* Blocked banner */
+.blk-banner{
+  display:none;align-items:center;gap:7px;
+  margin:8px 12px 0;padding:7px 12px;border-radius:10px;
+  background:rgba(255,73,118,.07);border:1px solid rgba(255,73,118,.15);
+  font-size:10px;color:var(--red);font-weight:600;
+}
+.blk-banner.show{display:flex}
+
+/* Main button */
+.main-btn{
+  margin:10px 12px 0;width:calc(100% - 24px);
+  padding:12px;border-radius:13px;border:none;cursor:pointer;
+  font-family:'Onest',sans-serif;font-size:13px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .22s;position:relative;overflow:hidden;
+}
+.main-btn.start{
+  background:linear-gradient(135deg,#7C6FFF,#5A52E8);color:#fff;
+  box-shadow:0 4px 20px rgba(124,111,255,.4);
+}
+.main-btn.start:hover{box-shadow:0 6px 28px rgba(124,111,255,.55);transform:translateY(-1px)}
+.main-btn.stop{background:rgba(255,73,118,.1);color:var(--red);border:1px solid rgba(255,73,118,.2)}
+.main-btn.stop:hover{background:rgba(255,73,118,.18)}
+.main-btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+
+/* Open btn */
+.open-btn{
+  margin:8px 12px 14px;width:calc(100% - 24px);
+  padding:10px;border-radius:13px;background:transparent;
+  border:1px solid var(--bd);color:var(--tx2);
+  font-family:'Onest',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.open-btn:hover{border-color:var(--ac);color:var(--ac);background:rgba(124,111,255,.06)}
+
+/* Spinner */
+.sp{width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .55s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="logo">
+    <svg width="17" height="17" viewBox="0 0 20 20" fill="none">
+      <path d="M10 2L3 5V10C3 14 6.5 17.5 10 18.5C13.5 17.5 17 14 17 10V5L10 2Z" stroke="#fff" stroke-width="1.4" fill="rgba(255,255,255,.15)"/>
+      <path d="M7 10L9 12L13 8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div>
+    <div class="brand">MailGuard Pro</div>
+    <div class="brand-sub">LOCAL ML · v7.0</div>
+  </div>
+  <div class="hdr-right">
+    <button class="icon-btn" id="home-btn" title="Home page">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </button>
+    <button class="icon-btn" id="theme-btn">
+      <svg id="ti" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="srv-row">
+  <div class="srv-ind">
+    <div class="srv-dot" id="srv-dot"></div>
+    <span class="srv-text" id="srv-text">Checking…</span>
+  </div>
+  <span class="user-tag" id="user-tag"></span>
+</div>
+
+<div class="det-row">
+  <div class="det-left">
+    <div class="ring" id="ring"><div class="ring-core"></div></div>
+    <span class="det-label" id="det-label">Detection <b>off</b></span>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat-card"><div class="stat-n" id="sc" style="color:var(--red)">0</div><div class="stat-l">Critical</div></div>
+  <div class="stat-card"><div class="stat-n" id="sh" style="color:var(--org)">0</div><div class="stat-l">High</div></div>
+  <div class="stat-card"><div class="stat-n" id="st" style="color:var(--acl)">0</div><div class="stat-l">Scanned</div></div>
+</div>
+
+<div class="blk-banner" id="blk-banner">
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+  <span id="blk-txt">0 senders blocked</span>
+</div>
+
+<button class="main-btn start" id="main-btn" disabled>
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="btn-ico"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+  <span id="btn-txt">Start Detection</span>
+</button>
+
+<button class="open-btn" id="open-btn">
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+  Open Threat Dashboard
+</button>
+
+<script src="popup.js"></script>
+</body>
+</html>
