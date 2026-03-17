@@ -1,7 +1,7 @@
 // MailGuard Pro v7 — background.js (Local ML Server Edition)
 // API runs at http://localhost:5000
 
-const API_BASE        = "http://localhost:5000";
+const API_BASE     = "https://fortunate-dream.up.railway.app";
 const ANALYZE_URL     = `${API_BASE}/api/analyze`;
 const OPENAI_API_URL  = "https://api.openai.com/v1/chat/completions";
 const POLL_INTERVAL   = 30;        // seconds
